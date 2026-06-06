@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>飲品紀錄庫 | Daily Sip.</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <style>
+        /* 頁面大標題優化 */
+        .page-header-box {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        .page-header-box .section-title {
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+        .page-subtitle {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        /* 互動按鈕精緻化 */
+        .custom-btn {
+            background-color: var(--accent-green);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px; /* 膠囊圓角 */
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 10px rgba(173, 193, 163, 0.3);
+            transition: all 0.3s ease;
+        }
+        .custom-btn:hover {
+            background-color: #8fa685;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(173, 193, 163, 0.4);
+        }
+
+        /* 歷史表格史詩級美化 */
+        .drinks-table {
+            width: 100%;               /* 🎯 關鍵：讓表格填滿左右兩側 */
+            border-collapse: separate; /* 為了完美呈現圓角 */
+            border-spacing: 0;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(61, 58, 54, 0.05); /* 高級感淡陰影 */
+            border: 1px solid #E6DFD3;
+        }
+        .drinks-table th {
+            background-color: var(--main-brown);
+            color: #FFFFFF;
+            font-weight: 600;
+            padding: 18px 20px;
+            letter-spacing: 1px;
+            font-size: 0.95rem;
+        }
+        .drinks-table td {
+            padding: 18px 20px;
+            background-color: #FFFFFF;
+            border-bottom: 1px solid #F0EDE5;
+            color: var(--text-dark);
+            font-size: 0.95rem;
+            transition: background-color 0.2s ease;
+        }
+        /* 移除最後一行的底線，避免破壞圓角 */
+        .drinks-table tr:last-child td {
+            border-bottom: none;
+        }
+        /* 滑鼠懸停整行高亮 */
+        .drinks-table tr:hover td {
+            background-color: #FBF9F5;
+        }
+        /* 評分星星黃金高亮 */
+        .rating {
+            color: #E6A23C !important; /* 高級感的琥珀金 */
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        /* 心得手札卡片化 (Review Cards) */
+        .review-section {
+            background-color: #FFFFFF;
+            border-radius: 14px;
+            border-left: 6px solid var(--main-brown); /* 側邊茶色緞帶 */
+            margin-bottom: 25px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.02);
+            border-top: 1px solid #F0EDE5;
+            border-right: 1px solid #F0EDE5;
+            border-bottom: 1px solid #F0EDE5;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        /* 讓特定店家的卡片有不同的文青配色點綴 */
+        .review-section.milksha { border-left-color: var(--accent-green); }
+        .review-section.macu { border-left-color: #C86B6B; } /* 芒果紅點綴 */
+
+        .review-section:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(61, 58, 54, 0.06);
+        }
+
+        .review-title {
+            padding: 22px 25px;
+            font-weight: 600;
+            font-size: 1.05rem;
+            cursor: pointer;
+            background-color: #FFFFFF;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            transition: background-color 0.2s;
+        }
+        .review-title:hover {
+            background-color: #FBF9F5;
+        }
+        /* 在右側加上一個優雅的展開箭頭圖示效果 */
+        .review-title::after {
+            content: '▾';
+            font-size: 1.2rem;
+            color: var(--text-light);
+            transition: transform 0.3s;
+        }
+        /* 當被展開時箭頭旋轉 (透過 jQuery 控制) */
+        .review-title.opened::after {
+            transform: rotate(180deg);
+        }
+
+        .review-content {
+            padding: 0 25px 25px 25px; /* 優化留白 */
+            display: none; 
+            background-color: #FFFFFF;
+            color: var(--text-light);
+            font-size: 0.95rem;
+            line-height: 1.8;
+            letter-spacing: 0.5px;
+        }
+        .review-content p {
+            background-color: #FDFBF7; /* 文字內襯底色，像手札本一樣 */
+            padding: 15px 20px;
+            border-radius: 8px;
+            border: 1px dashed #E6DFD3;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="header-container">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="images/logo.png" alt="Daily Sip. Logo" class="logo-img">
+                </a>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">首頁</a></li>
+                    <li><a href="drinks.html" class="active">完整紀錄庫</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        
+        <div class="page-header-box">
+            <h3 class="section-title">歷史清單</h3>
+            <p class="page-subtitle">沒有加料的飲料不能叫飲料</p>
+        </div>
+        
+        <div style="text-align: center; margin-bottom: 35px;">
+            <button id="btn-toggle-table" class="custom-btn">切換歷史表格 顯示/隱藏</button>
+        </div>
+
+        <div class="table-responsive" id="drinks-table-box">
+            <table class="drinks-table">
+                <thead>
+                    <tr>
+                        <th>消費日期</th>
+                        <th>品牌店家</th>
+                        <th>品項名稱</th>
+                        <th>專屬配方</th>
+                        <th>消費價格</th>
+                        <th>私心評分</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>2026.06.02</td>
+                        <td><strong>得正</strong></td>
+                        <td>紅心芭樂烏龍奶昔</td>
+                        <td>微糖 / 微冰</td>
+                        <td>$85 元</td>
+                        <td class="rating">★★★★★</td>
+                    </tr>
+                    <tr>
+                        <td>2026.05.29</td>
+                        <td><strong>迷客夏</strong></td>
+                        <td>荔多鮮奶果昔</td>
+                        <td>半糖 / -</td>
+                        <td>$60 元</td>
+                        <td class="rating">★★★☆☆</td>
+                    </tr>
+                    <tr>
+                        <td>2026.05.23</td>
+                        <td><strong>麻古茶坊</strong></td>
+                        <td>楊枝甘露2.0</td>
+                        <td>正常糖 / -</td>
+                        <td>$90 元</td>
+                        <td class="rating">★★★★★</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="page-header-box" style="margin-top: 80px;">
+            <h3 class="section-title"> 品飲詳細心得</h3>
+            <p class="page-subtitle">好喝一直喝</p>
+        </div>
+        
+        <div class="review-section" id="drink01">
+            <div class="review-title" id="review-title-1">✨ 得正 － 紅心芭樂烏龍奶昔</div>
+            <div class="review-content" id="drink-content-1">
+                <p>前幾天買的時候還沒喝就摔到地上了，非常傷心。心心念念好幾天終於喝到了。芭樂和奶味融合得很好，甜度適中非常香甜。</p>
+            </div>
+        </div>
+
+        <div class="review-section milksha" id="drink02">
+            <div class="review-title" id="review-title-2">✨ 迷客夏 － 荔多鮮奶果昔</div>
+            <div class="review-content" id="drink-content-2">
+                <p>替朋友試試好不好喝。半糖就好甜了，感覺適合微糖。荔枝味很夠，喝起來像冰沙但沒什麼奶味。</p>
+            </div>
+        </div>
+
+        <div class="review-section macu" id="drink03">
+            <div class="review-title" id="review-title-3">✨ 麻古茶坊 － 楊枝甘露2.0</div>
+            <div class="review-content" id="drink-content-3">
+                <p>是碎冰沙，非常好喝，配料很夠芒果也甜，買外送貴比較多但真的好喝。</p>
+            </div>
+        </div>
+
+    </main>
+
+    <a href="#" id="to-top-btn">▲</a>
+
+    <footer class="site-footer">
+        <p>Designed by hishi</p>
+    </footer>
+
+    <script>
+        $(document).ready(function(){
+            // 表格收合與展開
+            $("#btn-toggle-table").click(function(){
+                $("#drinks-table-box").slideToggle(400);
+            });
+
+            // 心得 1 收合與箭頭旋轉 (已修正對應的 content ID)
+            $("#review-title-1").click(function(){
+                $(this).toggleClass("opened");
+                $("#drink-content-1").slideToggle(300);
+            });
+
+            // 心得 2 收合與箭頭旋轉 (已修正對應的 content ID)
+            $("#review-title-2").click(function(){
+                $(this).toggleClass("opened");
+                $("#drink-content-2").slideToggle(300);
+            });
+
+            // 心得 3 收合與箭頭旋轉 (已修正對應的 content ID)
+            $("#review-title-3").click(function(){
+                $(this).toggleClass("opened");
+                $("#drink-content-3").slideToggle(300);
+            });
+        });
+    </script>
+
+</body>
+</html>

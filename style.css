@@ -1,0 +1,327 @@
+@charset "utf-8";
+
+/* ==========================================================================
+   1. 基礎設定與變數 (Reset & Variables)
+   ========================================================================== */
+:root {
+    --bg-color: #F9F6F0;       /* 溫潤厚奶白 */
+    --main-brown: #B58D63;     /* 濃郁焙茶棕 */
+    --accent-green: #ADC1A3;   /* 質感抹茶綠 */
+    --text-dark: #3D3A36;      /* 深炭焙灰 */
+    --text-light: #7A756E;     /* 淺焙灰 */
+    --card-bg: #FFFFFF;        /* 純白卡片 */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Helvetica Neue", Arial, "Noto Sans TC", sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* ==========================================================================
+   2. 表頭與導覽列 (Header & Nav)
+   ========================================================================== */
+.site-header {
+    background-color: var(--card-bg);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo-img {
+    height: 60px;       /* 控制 Logo 在網頁上的高度 */
+    width: auto;        /* 寬度自動等比例縮放 */
+    display: block;
+    transition: transform 0.3s;
+}
+
+.logo-img:hover {
+    transform: scale(1.05);
+}
+
+.main-nav ul {
+    display: flex;
+    list-style: none;
+}
+
+.main-nav ul li {
+    margin-left: 20px;
+}
+
+.main-nav ul li a {
+    font-weight: 500;
+    padding: 5px 10px;
+    transition: color 0.3s;
+}
+
+.main-nav ul li a:hover,
+.main-nav ul li a.active {
+    color: var(--main-brown);
+    border-bottom: 2px solid var(--main-brown);
+}
+
+/* ==========================================================================
+   3. 主視覺區 (Hero Banner)
+   ========================================================================== */
+.hero-section {
+    background-color: #E6DFD3;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('../images/hero-banner.jpg');
+    background-size: cover;
+    background-position: center;
+    color: #FFFFFF;
+    text-align: center;
+    padding: 100px 20px;
+}
+
+.hero-content h2 {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.hero-content p {
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* ==========================================================================
+   4. 主要內容與卡片排版 (Main Content & Grid)
+   ========================================================================== */
+.container {
+    max-width: 1200px;
+    margin: 60px auto;
+    padding: 0 20px;
+}
+
+.section-title {
+    font-size: 1.8rem;
+    text-align: center;
+    margin-bottom: 40px;
+    color: var(--text-dark);
+    position: relative;
+}
+
+.drinks-grid {
+    display: flex;
+    gap: 30px;
+    justify-content: space-between;
+}
+
+.drink-card {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.drink-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+}
+
+.drink-img-box {
+    width: 100%;
+    height: 220px;
+    background-color: #EEE;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+.drink-img-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* 🎯 補上：卡片日期與店家標籤的排版 */
+.card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.drink-date {
+    font-size: 0.85rem;
+    color: var(--text-light);
+}
+
+.brand-tag {
+    background-color: var(--bg-color);
+    color: var(--main-brown);
+    font-size: 0.75rem;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 500;
+}
+
+.drink-card h4 {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    color: var(--text-dark);
+    font-weight: 600;
+}
+
+/* 🎯 補上：專屬配方與價格區塊，並讓按鈕完美對齊底部 */
+.recipe-price-box {
+    display: flex;
+    justify-content: space-between; /* 左右對齊 */
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 10px 0;
+    border-top: 1px dashed #F0EDE5;
+    border-bottom: 1px dashed #F0EDE5;
+    font-size: 0.9rem;
+    flex-grow: 1; /* 核心：自動填滿空間，把下方的按鈕推向最底部 */
+}
+
+.my-recipe {
+    color: var(--text-light);
+}
+
+.drink-price {
+    font-weight: 600;
+    color: #C86B6B; /* 淡淡的質感紅點綴價格 */
+}
+
+.btn {
+    display: block;
+    text-align: center;
+    background-color: var(--main-brown);
+    color: #FFFFFF;
+    padding: 12px 0;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #96714B;
+}
+
+/* 🎯 補上：第二頁表格在手機版的防破圖滾動容器 */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* 🎯 補上：右下角「回到頂部」按鈕樣式 */
+#to-top-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 45px;
+    height: 45px;
+    background-color: var(--main-brown);
+    color: white;
+    text-align: center;
+    line-height: 45px;
+    border-radius: 50%;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    z-index: 99;
+    transition: all 0.3s;
+    font-size: 0.8rem;
+}
+#to-top-btn:hover {
+    background-color: var(--text-dark);
+    transform: translateY(-3px);
+}
+
+/* ==========================================================================
+   5. 頁尾 (Footer)
+   ========================================================================== */
+.site-footer {
+    background-color: var(--text-dark);
+    color: #E6DFD3;
+    text-align: center;
+    padding: 30px 20px;
+    margin-top: 100px;
+    font-size: 0.9rem;
+}
+
+.site-footer p:first-child {
+    margin-bottom: 5px;
+}
+
+/* ==========================================================================
+   6. 響應式網頁設計 (RWD 媒體查詢)
+   ========================================================================== */
+/* 平板尺寸 (992px 以下) */
+@media (max-width: 992px) {
+    .drinks-grid {
+        gap: 20px;
+    }
+}
+
+/* 手機尺寸 (768px 以下) */
+@media (max-width: 768px) {
+    .header-container {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .main-nav ul li {
+        margin: 0 10px;
+    }
+    
+    .hero-content h2 {
+        font-size: 1.8rem;
+    }
+    
+    .drinks-grid {
+        flex-direction: column; /* 關鍵：卡片在手機版從橫排變成直排 */
+        gap: 30px;
+    }
+    
+    .drink-img-box {
+        height: 250px; /* 手機版拉高圖片比例更好看 */
+    }
+    
+    /* 手機版讓配方盒子不要長得太開 */
+    .recipe-price-box {
+        flex-grow: 0;
+        margin-bottom: 15px;
+    }
+}
