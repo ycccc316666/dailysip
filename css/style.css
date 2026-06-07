@@ -347,25 +347,32 @@ img {
     box-shadow: 0 6px 18px rgba(173, 193, 163, 0.4);
 }
 /* ==========================================================================
-   8. ?? 懸浮框彈出視窗樣式 (Modal Popup Styles)
+   8. 修正版：懸浮框彈出視窗樣式 (允許內部滾動 + 增加照片上傳)
    ========================================================================== */
 .modal-overlay {
-    display: none; /* 預設隱藏 */
+    display: none; 
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(61, 58, 54, 0.5); /* 深炭焙灰半透明遮罩 */
-    backdrop-filter: blur(4px); /* 高級感毛玻璃特效 */
-    z-index: 2000; /* 確保在最上層 */
+    background-color: rgba(61, 58, 54, 0.5); 
+    backdrop-filter: blur(4px); 
+    z-index: 2000; 
+    
+    /* ?? 關鍵修正：當懸浮框太長時，允許整個遮罩層上下滾動，解決卡住看不見下方的問題 */
+    overflow-y: auto; 
+    padding: 20px 0;
 }
 
 .modal-card {
     background-color: var(--card-bg);
-    width: 90%;
+    width: 92%;
     max-width: 500px;
-    margin: 60px auto;
+    
+    /* ?? 關鍵修正：取消死死鎖在畫面中央的絕對排版，用 margin 讓它在滾動時有上下安全間距 */
+    margin: 40px auto; 
+    
     border-radius: 16px;
     padding: 30px;
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
@@ -374,7 +381,7 @@ img {
 }
 
 @keyframes modalSlideUp {
-    from { transform: translateY(30px); opacity: 0; }
+    from { transform: translateY(20px); opacity: 0; }
     to { transform: translateY(0); opacity: 1; }
 }
 
@@ -437,6 +444,14 @@ img {
     color: var(--text-dark);
     outline: none;
     transition: all 0.2s;
+}
+
+/* ?? 照片上傳欄位的特殊精緻外觀 */
+.form-group input.file-input {
+    padding: 8px;
+    background-color: #F0EDE5;
+    border: 1px dashed var(--main-brown);
+    cursor: pointer;
 }
 
 .form-group input:focus,
