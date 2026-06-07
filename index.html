@@ -6,39 +6,41 @@
     <title>Daily Sip. | 我的手搖飲相遇日記</title>
     <link rel="stylesheet" href="css/style.css">
     
-    <!-- 🎯 關鍵修正：把 jQuery 核心與控制腳本搬到最上面，確保網頁一載入就聽得懂點擊指令！ -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function(){
             // 點擊新增按鈕：淡入顯示懸浮框
             $("#btn-add-drink").click(function(e){
-                e.preventDefault(); // 防止按鈕預設跳轉行為
+                e.preventDefault();
                 $("#drink-modal").fadeIn(300);
+                $("body").css("overflow", "hidden"); // 🆕 彈出時鎖定主網頁滾動，防止雙重滾動
             });
 
             // 點擊叉叉按鈕：淡出隱藏懸浮框
             $("#btn-close-modal").click(function(){
                 $("#drink-modal").fadeOut(300);
+                $("body").css("overflow", "auto"); // 🆕 關閉時恢復主網頁滾動
             });
 
             // 點擊懸浮框外圍半透明處：也能關閉視窗
             $("#drink-modal").click(function(e){
                 if($(e.target).hasClass("modal-overlay")) {
                     $(this).fadeOut(300);
+                    $("body").css("overflow", "auto");
                 }
             });
 
             // 點擊儲存按鈕：跳出可愛提示並關閉
             $("#btn-submit-drink").click(function(){
-                alert("🎉 紀錄成功！(此處為前端模擬，資料已成功寫入你的文青本本裡)");
+                alert("🎉 紀錄成功！(此處為前端模擬，照片與資料已成功寫入你的文青本本裡)");
                 $("#drink-modal").fadeOut(300);
+                $("body").css("overflow", "auto");
             });
         });
     </script>
 </head>
 <body>
 
-    <!-- 表頭導覽列 -->
     <header class="site-header">
         <div class="header-container">
             <div class="logo">
@@ -55,7 +57,6 @@
         </div>
     </header>
 
-    <!-- 主視覺主圖區 -->
     <section class="hero-section">
         <div class="hero-content">
             <h2>每天都想喝手搖(´┓`*)</h2>
@@ -63,14 +64,11 @@
         </div>
     </section>
 
-    <!-- 主要內容區 -->
     <main class="container">
         <h3 class="section-title"> 最近喝ㄉ手搖</h3>
         
-        <!-- 卡片群組 -->
         <div class="drinks-grid">
             
-            <!-- 卡片 1 -->
             <div class="drink-card">
                 <div class="drink-img-box">
                     <a href="drinks.html#drink01">
@@ -89,7 +87,6 @@
                 <a href="drinks.html#drink01" class="btn">查看詳細點評</a>
             </div>
 
-            <!-- 卡片 2 -->
             <div class="drink-card">
                 <div class="drink-img-box">
                     <a href="drinks.html#drink02">
@@ -108,7 +105,6 @@
                 <a href="drinks.html#drink02" class="btn">查看詳細點評</a>
             </div>
 
-            <!-- 卡片 3 -->
             <div class="drink-card">
                 <div class="drink-img-box">
                     <a href="drinks.html#drink03">
@@ -129,18 +125,16 @@
 
         </div> 
         
-        <!-- 🎯 新增手搖飲紀錄按鈕 -->
         <div style="text-align: center; margin-top: 50px;">
             <button id="btn-add-drink" class="custom-btn">+ 新增手搖飲紀錄</button>
         </div>
         
     </main> 
 
-    <!-- 懸浮框（Modal）HTML 結構 -->
     <div id="drink-modal" class="modal-overlay">
         <div class="modal-card">
             <div class="modal-header">
-                <h3>✨ 新增紀錄</h3>
+                <h3>✨ 新增品飲紀錄</h3>
                 <span id="btn-close-modal" class="close-icon">&times;</span>
             </div>
             <form id="add-drink-form" onsubmit="event.preventDefault();">
@@ -148,6 +142,12 @@
                     <label>消費日期</label>
                     <input type="date" value="2026-06-07">
                 </div>
+                
+                <div class="form-group">
+                    <label>上傳手搖飲照片</label>
+                    <input type="file" accept="image/*" class="file-input">
+                </div>
+
                 <div class="form-group">
                     <label>品牌店家</label>
                     <input type="text" placeholder="例如：得正、五桐號...">
@@ -185,7 +185,6 @@
         </div>
     </div>
     
-    <!-- 頁尾 -->
     <footer class="site-footer">
         <p>Designed by hishi</p>
     </footer>
